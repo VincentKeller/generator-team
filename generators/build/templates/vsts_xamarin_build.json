@@ -16,7 +16,7 @@
       "condition": "succeeded()",
       "task": {
         "id": "42284b34-be85-4034-890f-8755ad9f6249",
-        "versionSpec": "0.*",
+        "versionSpec": "1.*",
         "definitionType": "task"
       },
       "inputs": {
@@ -37,7 +37,7 @@
       "condition": "succeeded()",
       "task": {
         "id": "77f3c5c9-713f-4eb6-bd73-42324109ea2e",
-        "versionSpec": "0.*",
+        "versionSpec": "1.*",
         "definitionType": "task"
       },
       "inputs": {
@@ -58,7 +58,7 @@
       "condition": "succeeded()",
       "task": {
         "id": "99796404-38d2-487b-887e-5b581b5c47eb",
-        "versionSpec": "0.*",
+        "versionSpec": "1.*",
         "definitionType": "task"
       },
       "inputs": {
@@ -79,7 +79,7 @@
       "condition": "succeeded()",
       "task": {
         "id": "a0393340-3465-4b5d-bbc4-0f6b1cd5ae4c",
-        "versionSpec": "0.*",
+        "versionSpec": "1.*",
         "definitionType": "task"
       },
       "inputs": {
@@ -87,6 +87,26 @@
         "packageName": "$(PackageName)",
         "appLabel": "$(ApplicationName)",
         "printFile": "true"
+      }
+    },
+    { 
+      "environment":{ 
+
+      },
+      "enabled":true,
+      "continueOnError":false,
+      "alwaysRun":false,
+      "displayName":"Nuget Tool Installer Task",
+      "timeoutInMinutes":0,
+      "condition":"succeeded()",
+      "task":{ 
+         "id":"2c65196a-54fd-4a02-9be8-d9d1837b7c5d",
+         "versionSpec":"1.*",
+         "definitionType":"task"
+      },
+      "inputs":{ 
+         "versionSpec":"",
+         "checkLatest":"false"
       }
     },
     {
@@ -167,9 +187,6 @@
         "jdkArchitecture": "x64"
       }
     },
-
-
-
     {
       "environment": {},
       "enabled": true,
@@ -427,7 +444,7 @@
       "fetchDepth": "0",
       "gitLfsSupport": "false",
       "skipSyncSource": "false",
-      "cleanOptions": "0"
+      "cleanOptions": "3"
     },
     "type": "TfsGit",
     "name": "{{Project}}",
