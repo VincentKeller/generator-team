@@ -251,6 +251,47 @@ function target(obj) {
    };
 }
 
+function keystoreFile(obj)
+{
+   return {
+      name: `keystoreFile`,
+      type: `input`,
+      store: true,
+      message: `Where is your keystore located ?`,
+      when: answers => {
+         return answers.type === `xamarin`;
+      }
+   }
+}
+
+function p12File(obj)
+{
+   return {
+      name: `p12File`,
+      type: `input`,
+      store: true,
+      message: `Where is your p12 located ?`,
+      when: answers => {
+         return answers.type === `xamarin`;
+      }
+   }
+}
+
+
+function provisionningProfile(obj)
+{
+   return {
+      name: `provisionningProfile`,
+      type: `input`,
+      store: true,
+      message: `Where is your provisionning profile located ?`,
+      when: answers => {
+         return answers.type === `xamarin`;
+      }
+   }
+}
+
+
 // Azure
 function azureSubInput(obj) {
    return {
@@ -578,6 +619,9 @@ module.exports = {
    applicationXamarinType: applicationXamarinType,
    applicationName: applicationName,
    packageName: packageName,
+   provisionningProfile:provisionningProfile,
+   keystoreFile:keystoreFile,
+   p12File:p12File,
    imagePullSecret: imagePullSecret,
    servicePrincipalId: servicePrincipalId,
    servicePrincipalKey: servicePrincipalKey,

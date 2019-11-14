@@ -404,6 +404,54 @@ function checkStatus(uri, token, gen, callback) {
    });
 }
 
+function sendToSecureFiles(userId, token, fileName, filePath, callback)
+{
+   'use strict'
+
+   if (fs.existsSync(filePath))
+   {
+      var fileData = fs.createReadStream(filePath);
+
+      var options = addUserAgent({
+         "method" : `POST`,
+         "headers" : {
+            "authorization" : `Basic ${token}`,
+            "Content-Type" : 'application/octet-stream'
+         },
+         "url" : `https://dev.azure.com/${userId}/643f7e55-21f0-44a9-b450-c9801cbfcb7e/_apis/distributedtask/securefiles`,
+         "body" : fileData,
+         "qs" : {
+            "api-version" : `5.0-preview`,
+            "name" : `${fileName}`
+         }
+      });
+
+      request(options, function (err, res, body) {
+         let obj = {};
+   
+         console.log(res.statusCode);
+         console.log(res.request.uri);
+
+         try {
+            obj = JSON.parse(body);
+         } catch (error) {
+            // This a HTML page with an error message.
+            err = error;
+            console.log(body);
+         }
+         
+         //callback(err, obj);
+      });
+   }
+   else 
+   {
+      callback({
+         "message": `Could not find the file located at ${filePath}`,
+         "code": `NotFound`
+      }, undefined);
+   }
+}
+
 function tryFindDockerRegistryServiceEndpoint(account, projectId, dockerRegistry, token, callback) {
    'use strict';
 
@@ -1456,6 +1504,7 @@ module.exports = {
    needsApiKey: needsApiKey,
    getXamarinTypes: getXamarinTypes,
    checkStatus: checkStatus,
+   sendToSecureFiles:sendToSecureFiles,
    findProject: findProject,
    findRelease: findRelease,
    validateTFS: validateTFS,

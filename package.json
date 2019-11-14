@@ -53,12 +53,13 @@
    "license": "MIT",
    "dependencies": {
       "async": "^2.6.1",
+      "cheerio": "^1.0.0-rc.2",
       "node-env-file": "^0.1.8",
       "pad": "^2.2.1",
       "request": "^2.88.0",
       "uuid": "^3.3.2",
       "yeoman-generator": "^3.1.1",
-      "cheerio": "^1.0.0-rc.2",
+      "yo": "^3.1.0",
       "yosay": "^2.0.2"
    },
    "devDependencies": {
@@ -72,7 +73,6 @@
       "sinon": "^4.5.0",
       "sinon-test": "^2.3.0",
       "yeoman-assert": "^3.1.1",
-      "yeoman-test": "^1.8.0",
-      "yo": "^2.0.5"
+      "yeoman-test": "^1.8.0"
    }
 }

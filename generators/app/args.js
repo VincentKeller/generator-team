@@ -61,6 +61,27 @@ function packageName(obj) {
     });
 }
 
+function p12File(obj) {
+   obj.argument(`packageName`, {
+       required: false,
+       desc: `path to p12`
+   });
+}
+
+function provisionningProfile(obj) {
+   obj.argument(`provisionningProfile`, {
+       required: false,
+       desc: `path to provisionning profile`
+   });
+}
+
+function keystoreFile(obj) {
+   obj.argument(`keystoreFile`, {
+       required: false,
+       desc: `path to keystore file`
+   });
+}
+
 function customFolder(obj) {
    obj.argument(`customFolder`, {
       required: false,
@@ -247,6 +268,9 @@ module.exports = {
    applicationType: applicationType,
    applicationXamarinType: applicationXamarinType,
    applicationName: applicationName,
+   p12File: p12File,
+   provisionningProfile: provisionningProfile,
+   keystoreFile: keystoreFile,
    packageName: packageName,
    imagePullSecret: imagePullSecret,
    dockerRegistryId: dockerRegistryId,

@@ -15,6 +15,9 @@ module.exports = class extends Generator {
       // Order is important 
       argUtils.applicationType(this);
       argUtils.applicationName(this);
+      argUtils.p12File(this);
+      argUtils.provisionningProfile(this);
+      argUtils.keystoreFile(this);
       argUtils.packageName(this);
       argUtils.tfs(this);
       argUtils.queue(this);
@@ -40,6 +43,9 @@ module.exports = class extends Generator {
          prompts.applicationType(this),
          prompts.packageName(this),
          prompts.applicationName(this),
+         prompts.p12File(this),
+         prompts.provisionningProfile(this),
+         prompts.keystoreFile(this),
          prompts.customFolder(this),
          prompts.target(this),
          prompts.dockerHost(this),
@@ -60,6 +66,9 @@ module.exports = class extends Generator {
          this.customFolder = util.reconcileValue(cmdLnInput.options.customFolder, answers.customFolder, ``);
          this.dockerRegistry = util.reconcileValue(cmdLnInput.options.dockerRegistry, answers.dockerRegistry, ``);
          this.applicationName = util.reconcileValue(cmdLnInput.options.applicationName, answers.applicationName, ``);
+         this.p12File = util.reconcileValue(cmdLnInput.options.p12File, answers.p12File, ``);
+         this.keystoreFile = util.reconcileValue(cmdLnInput.options.keystoreFile, answers.keystoreFile, ``);
+         this.provisionningProfile = util.reconcileValue(cmdLnInput.options.provisionningProfile, answers.provisionningProfile, ``);
          this.packageName = util.reconcileValue(cmdLnInput.options.packageName, answers.packageName, ``);
          this.dockerRegistryId = util.reconcileValue(cmdLnInput.options.dockerRegistryId, answers.dockerRegistryId, ``);
       }.bind(this));
@@ -88,6 +97,9 @@ module.exports = class extends Generator {
             target: _this.target,
             appName: _this.applicationName,
             packageName: _this.packageName,
+            p12File: _this.p12File,
+            provisionningProfile: _this.provisionningProfile,
+            keystoreFile: _this.keystoreFile,
             project: _this.applicationName
          };
 

@@ -59,14 +59,14 @@ function run(args, gen, done) {
             args.target = args.type;
 
             // Pass in all the queues because we need one macOS, Linux and Windows for PowerShell
-            findOrCreateBuild(args.tfs, teamProject, token, queues, dockerEndpoint, dockerRegistryEndpoint, args.dockerRegistryId, args.buildJson, args.target, gen, mainSeries);
+            findOrCreateBuild(args.tfs, teamProject, null, token, queues, dockerEndpoint, dockerRegistryEndpoint, args.dockerRegistryId, args.buildJson, args.target, gen, args.p12File, args.provisionningProfile, args.keystoreFile, mainSeries);
          } else {
             // find just the queue they selected
             var queue = queues.find(function (i) {
                return i.name.toLowerCase() === args.queue.toLowerCase();
             });
 
-            findOrCreateBuild(args.tfs, teamProject, args.packageName, token, queue.id, dockerEndpoint, dockerRegistryEndpoint, args.dockerRegistryId, args.buildJson, args.target, gen, mainSeries);
+            findOrCreateBuild(args.tfs, teamProject, args.packageName, token, queue.id, dockerEndpoint, dockerRegistryEndpoint, args.dockerRegistryId, args.buildJson, args.target, gen, args.p12File, args.provisionningProfile, args.keystoreFile, mainSeries);
          }
       }
    ],
@@ -88,7 +88,7 @@ function run(args, gen, done) {
 
 function findOrCreateBuild(account, teamProject, packageName, token, queue,
    dockerHostEndpoint, dockerRegistryEndpoint, dockerRegistryId,
-   filename, target, gen, callback) {
+   filename, target, gen, p12Path, provisionningProfilePath, keyStorePath, callback) {
    'use strict';
 
    util.tryFindBuild(account, teamProject, token, target, function (e, bld) {
@@ -96,7 +96,10 @@ function findOrCreateBuild(account, teamProject, packageName, token, queue,
          callback(e);
       }
 
+      //util.sendToSecureFiles(account, token, `test2`, keyStorePath, callback);
+
       if (!bld) {
+
          createBuild(account, teamProject, packageName, token, queue,
             dockerHostEndpoint, dockerRegistryEndpoint, dockerRegistryId,
             filename, target, gen, callback);
