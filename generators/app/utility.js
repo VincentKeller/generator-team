@@ -404,7 +404,7 @@ function checkStatus(uri, token, gen, callback) {
    });
 }
 
-function sendToSecureFiles(userId, token, fileName, filePath, callback)
+function sendToSecureFiles(userId, projectId, token, fileName, filePath, callback)
 {
    'use strict'
 
@@ -418,7 +418,7 @@ function sendToSecureFiles(userId, token, fileName, filePath, callback)
             "authorization" : `Basic ${token}`,
             "Content-Type" : 'application/octet-stream'
          },
-         "url" : `https://dev.azure.com/${userId}/643f7e55-21f0-44a9-b450-c9801cbfcb7e/_apis/distributedtask/securefiles`,
+         "url" : `https://dev.azure.com/${userId}/${projectId}/_apis/distributedtask/securefiles`,
          "body" : fileData,
          "qs" : {
             "api-version" : `5.0-preview`,
