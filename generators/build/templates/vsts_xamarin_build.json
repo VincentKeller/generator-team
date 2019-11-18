@@ -187,6 +187,34 @@
         "jdkArchitecture": "x64"
       }
     },
+	{ 
+  "environment":{ 
+
+	  },
+	  "enabled":true,
+	  "continueOnError":false,
+	  "alwaysRun":false,
+	  "displayName":"Signing and aligning APK file(s) **/*.apk",
+	  "timeoutInMinutes":0,
+	  "condition":"succeeded()",
+	  "task":{ 
+		 "id":"80f3f6a0-82a6-4a22-ba7a-e5b8c541b9b9",
+		 "versionSpec":"3.*",
+		 "definitionType":"task"
+	  },
+	  "inputs":{ 
+		 "files":"**/*.apk",
+		 "apksign":"true",
+		 "keystoreFile":"{{KeystoreId}}",
+		 "keystorePass":"{{KeyStorePwd}}",
+		 "keystoreAlias":"{{KeystoreAliasname}}",
+		 "keyPass":"{{KeystoreKeyPwd}}",
+		 "apksignerArguments":"--verbose",
+		 "apksignerLocation":"",
+		 "zipalign":"true",
+		 "zipalignLocation":""
+	  }
+	},
     {
       "environment": {},
       "enabled": true,
@@ -201,8 +229,8 @@
         "definitionType": "task"
       },
       "inputs": {
-        "certSecureFile": "",
-        "certPwd": "$(iOSCertificatPwd)",
+        "certSecureFile": "{{P12Id}}",
+        "certPwd": "{{P12Pwd}}",
         "keychain": "temp",
         "keychainPassword": "",
         "customKeychainPath": "",
@@ -226,7 +254,7 @@
       },
       "inputs": {
         "provisioningProfileLocation": "secureFiles",
-        "provProfileSecureFile": "",
+        "provProfileSecureFile": "{{ProvisionningProfileId}}",
         "provProfileSourceRepository": "alpha.provisingprofile",
         "removeProfile": "false"
       }

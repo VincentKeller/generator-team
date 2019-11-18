@@ -44,8 +44,12 @@ module.exports = class extends Generator {
          prompts.packageName(this),
          prompts.applicationName(this),
          prompts.p12File(this),
+         prompts.p12Pwd(this),
          prompts.provisionningProfile(this),
          prompts.keystoreFile(this),
+         prompts.keystoreAliasname(this),
+         prompts.keystoreKeyPwd(this),
+         prompts.keystorePwd(this),
          prompts.customFolder(this),
          prompts.target(this),
          prompts.dockerHost(this),
@@ -67,8 +71,12 @@ module.exports = class extends Generator {
          this.dockerRegistry = util.reconcileValue(cmdLnInput.options.dockerRegistry, answers.dockerRegistry, ``);
          this.applicationName = util.reconcileValue(cmdLnInput.options.applicationName, answers.applicationName, ``);
          this.p12File = util.reconcileValue(cmdLnInput.options.p12File, answers.p12File, ``);
-         this.keystoreFile = util.reconcileValue(cmdLnInput.options.keystoreFile, answers.keystoreFile, ``);
+         this.p12Pwd = util.reconcileValue(cmdLnInput.options.p12Pwd, answers.p12Pwd);
          this.provisionningProfile = util.reconcileValue(cmdLnInput.options.provisionningProfile, answers.provisionningProfile, ``);
+         this.keystoreFile = util.reconcileValue(cmdLnInput.options.keystoreFile, answers.keystoreFile, ``);
+         this.keystoreAliasname = util.reconcileValue(cmdLnInput.options.keystoreAliasname, answers.keystoreAliasname, ``);
+         this.keystoreKeyPwd = util.reconcileValue(cmdLnInput.options.keystoreKeyPwd, answers.keystoreKeyPwd, ``);
+         this.keystorePwd = util.reconcileValue(cmdLnInput.options.keystorePwd, answers.keystorePwd, ``);
          this.packageName = util.reconcileValue(cmdLnInput.options.packageName, answers.packageName, ``);
          this.dockerRegistryId = util.reconcileValue(cmdLnInput.options.dockerRegistryId, answers.dockerRegistryId, ``);
       }.bind(this));
@@ -98,8 +106,12 @@ module.exports = class extends Generator {
             appName: _this.applicationName,
             packageName: _this.packageName,
             p12File: _this.p12File,
+            p12Pwd: _this.p12Pwd,
             provisionningProfile: _this.provisionningProfile,
             keystoreFile: _this.keystoreFile,
+            keystoreAliasname: _this.keystoreAliasname,
+            keystoreKeyPwd: _this.keystoreKeyPwd,
+            keystorePwd: _this.keystorePwd,
             project: _this.applicationName
          };
 

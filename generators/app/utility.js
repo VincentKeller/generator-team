@@ -355,6 +355,14 @@ function validateApiKey(input) {
    return validateRequired(input, `You must provide a apiKey`);
 }
 
+function validateFileInput(input) {
+   if (!input) {
+      return validateRequired(input, `You must provide a valid file path`);
+   }
+
+   return fs.existsSync(input) ? true : `You must provide a valid file path`
+}
+
 function tokenize(input, nvp) {
    for (var key in nvp) {
       input = input.replaceAll(key, nvp[key]);
@@ -407,6 +415,7 @@ function checkStatus(uri, token, gen, callback) {
 function sendToSecureFiles(userId, projectId, token, fileName, filePath, callback)
 {
    'use strict'
+   // Send a file to the Library of an AzureDevOps' pipeline.
 
    if (fs.existsSync(filePath))
    {
@@ -428,19 +437,21 @@ function sendToSecureFiles(userId, projectId, token, fileName, filePath, callbac
 
       request(options, function (err, res, body) {
          let obj = {};
-   
-         console.log(res.statusCode);
-         console.log(res.request.uri);
-
+         
          try {
             obj = JSON.parse(body);
          } catch (error) {
             // This a HTML page with an error message.
             err = error;
-            console.log(body);
          }
-         
-         //callback(err, obj);
+
+         if (res.statusCode === 200) 
+         {
+            callback(err, obj.id);
+         }
+         else {
+            callback(err, null);
+         }
       });
    }
    else 
@@ -1527,6 +1538,7 @@ module.exports = {
    isWindowsAgent: isWindowsAgent,
    validateApiKey: validateApiKey,
    validateGroupID: validateGroupID,
+   validateFileInput: validateFileInput,
    extractInstance: extractInstance,
    findPackageFeed: findPackageFeed,
    needsDockerHost: needsDockerHost,

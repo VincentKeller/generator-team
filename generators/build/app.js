@@ -59,14 +59,14 @@ function run(args, gen, done) {
             args.target = args.type;
 
             // Pass in all the queues because we need one macOS, Linux and Windows for PowerShell
-            findOrCreateBuild(args.tfs, teamProject, null, token, queues, dockerEndpoint, dockerRegistryEndpoint, args.dockerRegistryId, args.buildJson, args.target, gen, args.p12File, args.provisionningProfile, args.keystoreFile, mainSeries);
+            findOrCreateBuild(args.tfs, teamProject, null, token, queues, dockerEndpoint, dockerRegistryEndpoint, args.dockerRegistryId, args.buildJson, args.target, gen, null, null, null, null, null, null, null, mainSeries);
          } else {
             // find just the queue they selected
             var queue = queues.find(function (i) {
                return i.name.toLowerCase() === args.queue.toLowerCase();
             });
 
-            findOrCreateBuild(args.tfs, teamProject, args.packageName, token, queue.id, dockerEndpoint, dockerRegistryEndpoint, args.dockerRegistryId, args.buildJson, args.target, gen, args.p12File, args.provisionningProfile, args.keystoreFile, mainSeries);
+            findOrCreateBuild(args.tfs, teamProject, args.packageName, token, queue.id, dockerEndpoint, dockerRegistryEndpoint, args.dockerRegistryId, args.buildJson, args.target, gen, args.p12File, args.p12Pwd, args.provisionningProfile, args.keystoreFile, args.keystoreAliasname, args.keystoreKeyPwd, args.keystorePwd, mainSeries);
          }
       }
    ],
@@ -88,7 +88,7 @@ function run(args, gen, done) {
 
 function findOrCreateBuild(account, teamProject, packageName, token, queue,
    dockerHostEndpoint, dockerRegistryEndpoint, dockerRegistryId,
-   filename, target, gen, p12Path, provisionningProfilePath, keyStorePath, callback) {
+   filename, target, gen, p12Path, p12Pwd, provisionningProfilePath, keyStorePath, keystoreAliasname, keystoreKeyPwd, keystorePwd, callback) {
    'use strict';
 
    util.tryFindBuild(account, teamProject, token, target, function (e, bld) {
@@ -96,13 +96,36 @@ function findOrCreateBuild(account, teamProject, packageName, token, queue,
          callback(e);
       }
 
-      //util.sendToSecureFiles(account, token, `test2`, keyStorePath, callback);
-
       if (!bld) {
+         // We send the tree required files for Xamarin.
+         var p12FileId;
+         var keystoreFileId;
+         var provisionningProfileId;
 
-         createBuild(account, teamProject, packageName, token, queue,
-            dockerHostEndpoint, dockerRegistryEndpoint, dockerRegistryId,
-            filename, target, gen, callback);
+         async.parallel([
+            function(inParallel) {
+               util.sendToSecureFiles(account, teamProject.id, token, `${teamProject.name}.p12`, p12Path, function(err, id) {
+                     p12FileId = id;
+                     inParallel(err, p12FileId);
+               })
+            },
+            function(inParallel) {
+               util.sendToSecureFiles(account, teamProject.id, token, `${teamProject.name}.mobileprovision`, provisionningProfilePath, function(err, id) {
+                     provisionningProfileId = id;
+                     inParallel(err, provisionningProfileId);
+               })
+            },
+            function(inParallel) {
+               util.sendToSecureFiles(account, teamProject.id, token, `${teamProject.name}.keystore`, keyStorePath, function(err, id) {
+                     keystoreFileId = id;
+                     inParallel(err, keystoreFileId);
+               })
+            }
+         ], function(err, result) {
+            createBuild(account, teamProject, packageName, token, queue,
+               dockerHostEndpoint, dockerRegistryEndpoint, dockerRegistryId,
+               filename, target, p12FileId, p12Pwd, provisionningProfileId, keystoreFileId, keystoreAliasname, keystoreKeyPwd, keystorePwd, gen, callback);
+         });         
       } else {
          gen.log.ok(`Found build definition`);
          callback(e, bld);
@@ -112,7 +135,7 @@ function findOrCreateBuild(account, teamProject, packageName, token, queue,
 
 function createBuild(account, teamProject, packageName, token, queues,
    dockerHostEndpoint, dockerRegistryEndpoint, dockerRegistryId,
-   filename, target, gen, callback) {
+   filename, target, p12FileId, p12Pwd, provisionningProfileId, keystoreFileId, keystoreAliasname, keystoreKeyPwd, keystorePwd, gen, callback) {
    'use strict';
 
    let buildDefName = util.isDocker(target) ? `${teamProject.name}-Docker-CI` : `${teamProject.name}-CI`;
@@ -150,10 +173,18 @@ function createBuild(account, teamProject, packageName, token, queues,
    let dockerNamespace = util.getImageNamespace(dockerRegistryId, url);
 
    // Load the template and replace values.
+   console.log(keystorePwd);
    var contents = fs.readFileSync(filename, 'utf8');
    var tokens = {
       '{{BuildDefName}}': buildDefName,
       '{{PackageName}}': packageName,
+      '{{P12Id}}' : p12FileId,
+      '{{P12Pwd}}' : p12Pwd,
+      '{{ProvisionningProfileId}}' : provisionningProfileId,
+      '{{KeystoreId}}' : keystoreFileId,
+      '{{KeystoreAliasname}}' : keystoreAliasname,
+      '{{KeyStorePwd}}' : keystorePwd,
+      '{{KeystoreKeyPwd}}': keystoreKeyPwd,
       '{{TFS}}': account,
       '{{Project}}': teamProject.name,
       '{{QueueId}}': selected,

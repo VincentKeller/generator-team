@@ -257,9 +257,51 @@ function keystoreFile(obj)
       name: `keystoreFile`,
       type: `input`,
       store: true,
+      validate: util.validateFileInput,
       message: `Where is your keystore located ?`,
       when: answers => {
          return answers.type === `xamarin`;
+      }
+   }
+}
+
+
+function keystoreAliasname(obj)
+{
+   return {
+      name: `keystoreAliasname`,
+      type: `input`,
+      store: true,
+      message: `What is the keystore alias ?`,
+      when: answers => {
+         return answers.type === `xamarin` && answers.keystoreFile !== undefined;
+      }
+   }
+}
+
+
+function keystorePwd(obj)
+{
+   return {
+      name: `keystorePwd`,
+      type: `password`,
+      store: false,
+      message: `What is the keystore password ?`,
+      when: answers => {
+         return answers.type === `xamarin` && answers.keystoreFile !== undefined;
+      }
+   }
+}
+
+function keystoreKeyPwd(obj)
+{
+   return {
+      name: `keystoreKeyPwd`,
+      type: `password`,
+      store: false,
+      message: `What is the key password ?`,
+      when: answers => {
+         return answers.type === `xamarin` && answers.keystoreFile !== undefined;
       }
    }
 }
@@ -270,9 +312,24 @@ function p12File(obj)
       name: `p12File`,
       type: `input`,
       store: true,
+      validate: util.validateFileInput,
       message: `Where is your p12 located ?`,
       when: answers => {
          return answers.type === `xamarin`;
+      }
+   }
+}
+
+
+function p12Pwd(obj)
+{
+   return {
+      name: `p12Pwd`,
+      type: `password`,
+      store: true,
+      message: `What is the certificate password ?`,
+      when: answers => {
+         return answers.type === `xamarin` && answers.p12File !== undefined;
       }
    }
 }
@@ -284,6 +341,7 @@ function provisionningProfile(obj)
       name: `provisionningProfile`,
       type: `input`,
       store: true,
+      validate: util.validateFileInput,
       message: `Where is your provisionning profile located ?`,
       when: answers => {
          return answers.type === `xamarin`;
@@ -619,9 +677,13 @@ module.exports = {
    applicationXamarinType: applicationXamarinType,
    applicationName: applicationName,
    packageName: packageName,
-   provisionningProfile:provisionningProfile,
    keystoreFile:keystoreFile,
+   keystoreAliasname:keystoreAliasname,
+   keystorePwd:keystorePwd,
+   keystoreKeyPwd:keystoreKeyPwd,
    p12File:p12File,
+   p12Pwd:p12Pwd,
+   provisionningProfile:provisionningProfile,
    imagePullSecret: imagePullSecret,
    servicePrincipalId: servicePrincipalId,
    servicePrincipalKey: servicePrincipalKey,
