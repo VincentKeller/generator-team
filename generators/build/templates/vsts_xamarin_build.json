@@ -206,9 +206,9 @@
 		 "files":"**/*.apk",
 		 "apksign":"true",
 		 "keystoreFile":"{{KeystoreId}}",
-		 "keystorePass":"{{KeyStorePwd}}",
+		 "keystorePass":"$(androidKeystorePwd)",
 		 "keystoreAlias":"{{KeystoreAliasname}}",
-		 "keyPass":"{{KeystoreKeyPwd}}",
+		 "keyPass":"$(androidKeyPass)",
 		 "apksignerArguments":"--verbose",
 		 "apksignerLocation":"",
 		 "zipalign":"true",
@@ -230,7 +230,7 @@
       },
       "inputs": {
         "certSecureFile": "{{P12Id}}",
-        "certPwd": "{{P12Pwd}}",
+        "certPwd": "$(iOSCertificatPwd)",
         "keychain": "temp",
         "keychainPassword": "",
         "customKeychainPath": "",
@@ -427,10 +427,14 @@
     "PackageName": {
       "value": "{{PackageName}}.{{Project}}"
     },
-    "androidCertificatPwd": {
-      "value": null,
+    "androidKeystorePwd": {
+      "value": "{{KeyStorePwd}}",
       "isSecret": true
     },
+	"androidKeyPass": {
+		"value": "{{KeystoreKeyPwd}}",
+		"isSecret" : true
+	},
     "androidversionCode": {
       "value": ""
     },
@@ -442,7 +446,7 @@
       "value": "iPhone Developer:()"
     },
     "iOSCertificatPwd": {
-      "value": null,
+      "value": "{{P12Pwd}}",
       "isSecret": true
     },
     "UUID": {
