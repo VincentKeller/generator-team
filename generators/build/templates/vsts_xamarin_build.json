@@ -273,7 +273,7 @@
         "definitionType": "task"
       },
       "inputs": {
-        "solution": "Sources/{{BuildDefName}}.sln",
+        "solution": "iOS/{{BuildDefName}}.sln",
         "configuration": "$(BuildConfiguration)",
         "clean": "false",
         "packageApp": "true",
